@@ -1,0 +1,18 @@
+import pygame
+import sys
+from pygame.locals import *
+
+#Przykładowy przycisk wyjścia, z przykładowymi wymiarami i nazwami. Na jego podstawie można też znakomicie robić inne przyciski.
+
+clickme = pygame.Surface((60, 40))
+detecto = pygame.Rect(clickme.get_rect())
+clickme.fill((10, 100, 20))
+screen.blit(clickme, (170, 180))
+
+while True:
+    for event in pygame.event.get():
+    if event.type == MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+            if detecto.collidepoint(pos):
+              sys.exit
+            
