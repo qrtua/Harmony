@@ -5,9 +5,13 @@ from pygame.locals import *
 pygame.init()
 
 screen = pygame.display.set_mode((400, 400))
-clickme = pygame.Surface((60, 40))
+button_width = 60
+button_height = 40
+clickme = pygame.Surface((button_width, button_height))
 clickme.fill((10, 100, 20))
-screen.blit(clickme, (170, 180))
+button_x = 170
+button_y = 180
+screen.blit(clickme, (button_x, button_y))
 detecto = pygame.Rect(clickme.get_rect())
 typingface = pygame.font.Font('Adca.ttf', 23)
 
@@ -20,9 +24,10 @@ while True:
             sys.exit()
         elif event.type == MOUSEBUTTONDOWN:
             x, y = event.pos
-            if 170 < x < 230 and 180 < y < 220:
+            if button_x < x < button_x + button_width and button_y < y < button_y + button_height:
                 contador = contador + 1
                 typedface = typingface.render(str(contador), True, (0, 150, 0), (0, 0, 0))
                 typingrect = typedface.get_rect()
                 typingrect.center = (50, 30)
                 screen.blit(typedface, typingrect)
+                pygame.display.update()
