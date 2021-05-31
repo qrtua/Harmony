@@ -1,0 +1,64 @@
+# import random
+import pygame
+import os
+# from pygame.locals import *
+
+WIDTH, HEIGHT = 450, 450
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+SIZE = (150, 150)
+
+FPS = 60
+# BORD = pygame.image.load(os.path.join('Assets', 'outerbox.png'))
+# BORD = pygame.transform.scale(BORD, (450, 450))
+BORD_2 = pygame.Rect(0, 0, 460, 460)
+
+Kwadrat = pygame.Rect(0, 0, 150, 150)
+
+picture_1 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "1.png")), (SIZE))
+picture_2 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "2.png")), (SIZE))
+picture_3 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "3.png")), (SIZE))
+picture_4 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "4.png")), (SIZE))
+picture_5 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "5.png")), (SIZE))
+picture_6 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "6.png")), (SIZE))
+picture_7 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "7.png")), (SIZE))
+picture_8 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "8.png")), (SIZE))
+picture_0 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "outerbox.png")), (SIZE))
+
+
+pictures = [[picture_1, picture_4, picture_7],
+            [picture_2, picture_5, picture_8],
+            [picture_3, picture_6, picture_0]]
+
+def draw_window():
+    WIN.fill(WHITE)
+    pygame.draw.rect(WIN, BLACK, BORD_2)
+    for x in range(3):
+        for y in range(3):
+            WIN.blit(pictures[x][y], (x*150, y*150))
+    pygame.display.update()
+
+
+
+
+def main():
+
+    clock = pygame.time.Clock()
+    run = True
+    while run:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+
+        draw_window()
+
+
+    pygame.quit()
+
+
+if __name__ == "__main__":
+    main()
