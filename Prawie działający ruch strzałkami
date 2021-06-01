@@ -43,7 +43,7 @@ def draw_window():
 
 
 def key_movement(grid, empty_space):
-    get_key = pygame.key.get_pressed()
+    get_key = pygame.key.get_pressed()  # myślę, że to ta część stanowi problem. 
     if get_key[pygame.K_UP]:
         for i in range(len(grid)):
             for j in range(len(grid[i])):
@@ -91,7 +91,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            key_movement(pictures, picture_0)
+            key_movement(pictures, picture_0)  # to raczej powinno się znajdować jeden tab  do tylu i jak cofniesz to zobaczysz, że wychodzi na to, że każdy ruch działa jak prawy
 
         draw_window()
 
