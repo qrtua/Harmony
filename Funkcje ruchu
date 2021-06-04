@@ -1,7 +1,7 @@
 # import random
 import pygame
 import os
-# from pygame.locals import *
+from pygame.locals import *
 
 WIDTH, HEIGHT = 450, 450
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -43,41 +43,85 @@ def draw_window():
 
 
 def key_movement(grid, empty_space):
-    get_key = pygame.key.get_pressed()  # myślę, że to ta część stanowi problem. 
+    no_reps = False
+    get_key = pygame.key.get_pressed()
     if get_key[pygame.K_UP]:
         for i in range(len(grid)):
             for j in range(len(grid[i])):
                 if grid[i][j] == empty_space:
-                    if j != 0:
+                    if j != 0 and not no_reps:
+                        no_reps = True
                         temp = grid[i][j-1]
                         grid[i][j-1] = grid[i][j]
                         grid[i][j] = temp
                         break
-    if get_key[pygame.K_DOWN]:
+    elif get_key[pygame.K_DOWN]:
         for i in range(len(grid)):
             for j in range(len(grid[i])):
                 if grid[i][j] == empty_space:
-                    if j != len(grid[i])-1:
+                    if j != len(grid[i])-1 and not no_reps:
+                        no_reps = True
                         temp = grid[i][j+1]
                         grid[i][j+1] = grid[i][j]
                         grid[i][j] = temp
                         break
-    if get_key[pygame.K_LEFT]:
+    elif get_key[pygame.K_LEFT]:
         for i in range(len(grid)):
             for j in range(len(grid[i])):
                 if grid[i][j] == empty_space:
-                    if i != 0:
+                    if i != 0 and not no_reps:
+                        no_reps = True
                         temp = grid[i-1][j]
                         grid[i-1][j] = grid[i][j]
                         grid[i][j] = temp
                         break
-    if get_key[pygame.K_RIGHT]:
+    elif get_key[pygame.K_RIGHT]:
         for i in range(len(grid)):
             for j in range(len(grid[i])):
                 if grid[i][j] == empty_space:
-                    if i != len(grid)-1:
+                    if i != len(grid)-1 and not no_reps:
+                        no_reps = True
                         temp = grid[i+1][j]
                         grid[i+1][j] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+
+
+def mouse_movement(x, y, grid, empty_space, pict_spread, pict_size):
+    no_reps = False
+    for i in range(len(grid)):
+        for j in range(len(grid[i])):
+            if grid[i][j] == empty_space:
+                if j != 0 and not no_reps:
+                    if (pict_spread*i < x < (pict_spread*i + pict_size) and
+                            pict_spread*(j - 1) < y < (pict_spread*(j -1 ) + pict_size)):
+                        no_reps = True
+                        temp = grid[i][j - 1]
+                        grid[i][j - 1] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+                if j != len(grid[i]) - 1 and not no_reps:
+                    if (pict_spread * i < x < (pict_spread * i + pict_size) and
+                            pict_spread * (j + 1) < y < (pict_spread * (j + 1) + pict_size)):
+                        no_reps = True
+                        temp = grid[i][j + 1]
+                        grid[i][j + 1] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+                if i != 0 and not no_reps:
+                    if (pict_spread * (i - 1) < x < (pict_spread * (i - 1) + pict_size) and
+                            pict_spread * j < y < (pict_spread * j + pict_size)):
+                        no_reps = True
+                        temp = grid[i - 1][j]
+                        grid[i - 1][j] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+                if i != len(grid) - 1 and not no_reps:
+                    if (pict_spread * (i + 1) < x < (pict_spread * (i + 1) + pict_size) and
+                            pict_spread * j < y < (pict_spread * j + pict_size)):
+                        no_reps = True
+                        temp = grid[i + 1][j]
+                        grid[i + 1][j] = grid[i][j]
                         grid[i][j] = temp
                         break
 
@@ -91,7 +135,11 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            key_movement(pictures, picture_0)  # to raczej powinno się znajdować jeden tab  do tylu i jak cofniesz to zobaczysz, że wychodzi na to, że każdy ruch działa jak prawy
+            if event.type == KEYDOWN:
+                key_movement(pictures, picture_0)
+            if event.type == MOUSEBUTTONDOWN:
+                x, y = event.pos
+                mouse_movement(x, y, pictures, picture_0, 150, 150)
 
         draw_window()
 
