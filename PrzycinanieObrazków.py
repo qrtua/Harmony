@@ -29,8 +29,9 @@ picture_5 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "5.p
 picture_6 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "6.png")), (SIZE))
 picture_7 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "7.png")), (SIZE))
 picture_8 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "8.png")), (SIZE))
-picture_0 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "outerbox.png")), (SIZE))
 #powyższe NADPISUJE dodana funkcjonaalność PrzycinaniaObrazków i może być usunięte/zdezaktywowane
+
+picture_0 = pygame.transform.scale(pygame.image.load(os.path.join("Assets", "outerbox.png")), (SIZE))
 
 
 
