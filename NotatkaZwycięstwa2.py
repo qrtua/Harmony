@@ -1,4 +1,4 @@
-#Dokonane zmiany widać pomiędzy liniami typu """powyższe x **** PrzycinaniaObrazków""" a """poniższe x **** PrzycinaniaObrazków"""
+#Dokonane zmiany widać pomiędzy liniami typu """powyższe x **** Notatka Zwyciestwa 2""" a """poniższe x **** Not Zwy 2"""
 #kod powinien się uruchamiać, można go skopiować w celu dodania kolejnej funkcjonalności, polecam jednak wtedy pozbawić go klamr tej funkcjonalności i postawić nowe
 #funkcjonalność została zaprojektowana zgodnie z innymi sztywnie wczesniej ustalonymi wymiarami, w razie decyzji projektowej o zmianie tychże tj: wielkość kafli, wielkość okna, marginesy, wymiary siatki itd, należy zedytować również PrzycinaniaObrazków
 import random
