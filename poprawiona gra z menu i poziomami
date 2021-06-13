@@ -1,0 +1,334 @@
+# Dokonane zmiany widać pomiędzy liniami typu """powyższe x * Notatka Zwyciestwa 2""" a """poniższe x * Not Zwy 2"""
+# kod powinien się uruchamiać, można go skopiować w celu dodania kolejnej funkcjonalności, polecam jednak wtedy pozbawić go klamr tej funkcjonalności i postawić nowe
+# funkcjonalność została zaprojektowana zgodnie z innymi sztywnie wczesniej ustalonymi wymiarami, w razie decyzji projektowej o zmianie tychże tj: wielkość kafli, wielkość okna, marginesy, wymiary siatki itd, należy zedytować również PrzycinaniaObrazków
+import random
+import pygame
+import os
+from pygame.locals import *
+import pyautogui  # modul z oknami dialogowymi, wymaga instalacji, uzywany do NotatkiZwycięstwa
+
+# uruchom, cmd, jako admin i w konsole wpisać " python -m pip install pyautogui"
+WIDTH, HEIGHT = 615, 615
+WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+SIZE = (150,150)
+
+FPS = 60
+# BORD = pygame.image.load(os.path.join('Assets', 'outerbox.png'))
+# BORD = pygame.transform.scale(BORD, (450, 450))
+BORD_2 = pygame.Rect(0, 0, 615, 615)
+
+Kwadrat = pygame.Rect(0, 0, 150, 150)
+
+"""ponizsza zmienna jest ustalana na potrzebe NotatkiZwycięstwa"""
+with open("ciekawostka_tukan_1.txt", "r", encoding="utf-8") as f:
+    tresc_notatki = f.read().replace('\n', '')
+tresc_notatki = 'Gratulacje!\n' + tresc_notatki + '\nCzy chcesz rozwiązać kolejną zagadkę?'
+"""powyższa zmienna jest ustalana na potrzebe NotatkiZwycięstwa"""
+
+obrazek = pygame.image.load('tucan.jpg')
+os.path.join("Assets", 'tucan.jpg')  # obrazek musi znaajdować się w assetach i mieć określoną w tej linijce nazwę
+obrazek = pygame.transform.smoothscale(obrazek, (615, 615))
+
+
+def draw_window(picture,level,size):
+    WIN.fill(WHITE)
+    pygame.draw.rect(WIN, BLACK, BORD_2)
+    for x in range(level):
+        for y in range(level):
+            WIN.blit(picture[x][y], (x * size/level, y * size/level))
+    pygame.display.update()
+    print(picture)
+
+    for x in range(level):
+        for y in range(level):
+            print(picture[x][y])
+
+
+def draw_window_menu():
+    WIN.fill(WHITE)
+    pygame.draw.rect(WIN, BLACK, BORD_2)
+    pygame.display.update()
+
+def key_movement(grid, empty_space):
+    no_reps = False
+    get_key = pygame.key.get_pressed()
+    if get_key[pygame.K_UP]:
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == empty_space:
+                    if j != 0 and not no_reps:
+                        no_reps = True
+                        temp = grid[i][j - 1]
+                        grid[i][j - 1] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+    elif get_key[pygame.K_DOWN]:
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == empty_space:
+                    if j != len(grid[i]) - 1 and not no_reps:
+                        no_reps = True
+                        temp = grid[i][j + 1]
+                        grid[i][j + 1] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+    elif get_key[pygame.K_LEFT]:
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == empty_space:
+                    if i != 0 and not no_reps:
+                        no_reps = True
+                        temp = grid[i - 1][j]
+                        grid[i - 1][j] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+    elif get_key[pygame.K_RIGHT]:
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == empty_space:
+                    if i != len(grid) - 1 and not no_reps:
+                        no_reps = True
+                        temp = grid[i + 1][j]
+                        grid[i + 1][j] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+
+
+def fake_key_movement(grid,
+                      empty_space):  # fałszywy ruch, polega na tym samym co prawdziwy ale losuje kierunek zamiast pobierać z klawiatury
+    no_reps = False
+    get_key = random.choice([1, 2, 3, 4])
+    if get_key == 1:
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == empty_space:
+                    if j != 0 and not no_reps:
+                        no_reps = True
+                        temp = grid[i][j - 1]
+                        grid[i][j - 1] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+    elif get_key == 2:
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == empty_space:
+                    if j != len(grid[i]) - 1 and not no_reps:
+                        no_reps = True
+                        temp = grid[i][j + 1]
+                        grid[i][j + 1] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+    elif get_key == 3:
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == empty_space:
+                    if i != 0 and not no_reps:
+                        no_reps = True
+                        temp = grid[i - 1][j]
+                        grid[i - 1][j] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+    elif get_key == 4:
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                if grid[i][j] == empty_space:
+                    if i != len(grid) - 1 and not no_reps:
+                        no_reps = True
+                        temp = grid[i + 1][j]
+                        grid[i + 1][j] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+
+
+def mouse_movement(x, y, grid, empty_space, pict_spread, pict_size, offset_x=0, offset_y=0):
+    no_reps = False
+    for i in range(len(grid)):
+        for j in range(len(grid[i])):
+            if grid[i][j] == empty_space:
+                if j != 0 and not no_reps:
+                    if (offset_x + pict_spread * i < x < offset_x + (pict_spread * i + pict_size) and
+                            offset_y + pict_spread * (j - 1) < y < offset_y + (pict_spread * (j - 1) + pict_size)):
+                        no_reps = True
+                        temp = grid[i][j - 1]
+                        grid[i][j - 1] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+                if j != len(grid[i]) - 1 and not no_reps:
+                    if (offset_x + pict_spread * i < x < offset_x + (pict_spread * i + pict_size) and
+                            offset_y + pict_spread * (j + 1) < y < offset_y + (pict_spread * (j + 1) + pict_size)):
+                        no_reps = True
+                        temp = grid[i][j + 1]
+                        grid[i][j + 1] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+                if i != 0 and not no_reps:
+                    if (offset_x + pict_spread * (i - 1) < x < offset_x + (pict_spread * (i - 1) + pict_size) and
+                            offset_y + pict_spread * j < y < offset_y + (pict_spread * j + pict_size)):
+                        no_reps = True
+                        temp = grid[i - 1][j]
+                        grid[i - 1][j] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+                if i != len(grid) - 1 and not no_reps:
+                    if (offset_x + pict_spread * (i + 1) < x < offset_x + (pict_spread * (i + 1) + pict_size) and
+                            offset_y + pict_spread * j < y < offset_y + (pict_spread * j + pict_size)):
+                        no_reps = True
+                        temp = grid[i + 1][j]
+                        grid[i + 1][j] = grid[i][j]
+                        grid[i][j] = temp
+                        break
+
+
+def main_game(picture, level, pictures, correct_layout, size,dificulty = 10):     # pierwszy arg określa obrazek na którym gramy, drugi trudność variable, int
+    for i in range(dificulty):  # pętla, ilość iteracji odpowiada trudności układanki
+        fake_key_movement(picture, pictures[0])  # wykonuje się 5 fałszywego ruchu
+
+    clock = pygame.time.Clock()
+    run = True
+    draw_window(picture,level,size)  # rysuje obrazek przed jakimkolwiek wydarzeniem
+    while run:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == KEYDOWN:
+                key_movement(picture, pictures[0])
+                draw_window(picture,level)  # należało to tu wstawić by wykonał sie ostatni ruch
+
+                if picture == correct_layout:
+                    # print('zwycięstwo! 0') # to porzestaje być potrzebne
+                    """poniższe realizuje notatke zwyciestwa2"""
+                    if pyautogui.confirm(tresc_notatki, 'Zwycięstwo!!!', ['Kolejna gra', 'Dość']) == 'Dość':
+                        run = False
+                    elif pyautogui.confirm(tresc_notatki, 'Zwycięstwo!!!', ['Kolejna gra', 'Dość']) == 'Kolejna gra':
+                        main_menu()  # narazie nie wiem, jakiś restart
+                    """powyższe realizuje notatke zwyciestwa2"""
+
+            if event.type == MOUSEBUTTONDOWN:
+                x, y = event.pos
+                mouse_movement(x, y, picture, pictures[0], 150, 150)
+                draw_window(picture,level, size)  # należało to tu wstawić by wykonał sie ostatni ruch, podobnie jak wyzej
+
+                if picture == correct_layout:
+                    # print('zwycięstwo!') # to porzestaje być potrzebne, jak wyzej
+                    """poniższe realizuje notatke zwyciestwa2"""
+                    if pyautogui.confirm(tresc_notatki, 'Zwycięstwo!!!', ['Kolejna gra', 'Dość']) == 'Dość':
+                        run = False
+                    elif pyautogui.confirm(tresc_notatki, 'Zwycięstwo!!!', ['Kolejna gra', 'Dość']) == 'Kolejna gra':
+                        main_menu()
+                    """powyższe realizuje notatke zwyciestwa2"""
+
+        # draw_window() #chyba nieporzebnie sie to nieustannie wykonuje, no moze do czasu wstawienia animacji...
+
+    pygame.quit()
+
+def main_menu():
+    clock = pygame.time.Clock()
+    run = True
+    draw_window_menu()      # rysuje okno menu, które zawiera nasz biały guzik
+    while run:
+        clock.tick(FPS)
+
+        mx, my = pygame.mouse.get_pos()
+        pygame.font.init()
+        font = pygame.font.SysFont(None, 48)
+        button_3x3 = pygame.Rect(200,100,200,50)
+        button_4x4 = pygame.Rect(200,200,200,50)
+        pygame.draw.rect(WIN, WHITE, button_3x3)
+        pygame.draw.rect(WIN, WHITE, button_4x4)
+        WIN.blit(font.render("3x3", True, (255,0,0), WHITE), (265,110))
+        WIN.blit(font.render("4x4", True, (255,0,0), WHITE), (265,210))
+
+        if button_4x4.collidepoint((mx,my)):
+            if click:
+                size = 615
+                pictures = [
+                pygame.transform.scale(pygame.image.load(os.path.join("Assets", "outerbox.png")), (SIZE)),
+                obrazek.subsurface(0, 0, 150, 150),
+                obrazek.subsurface(150, 0, 150, 150),
+                obrazek.subsurface(300, 0, 150, 150),
+                obrazek.subsurface(450, 0, 150, 150),
+                obrazek.subsurface(0, 150, 150, 150),
+                obrazek.subsurface(150, 150, 150, 150),
+                obrazek.subsurface(300, 150, 150, 150),
+                obrazek.subsurface(450, 150, 150, 150),
+                obrazek.subsurface(0, 300, 150, 150),
+                obrazek.subsurface(150, 300, 150, 150),
+                obrazek.subsurface(300, 300, 150, 150),
+                obrazek.subsurface(450, 300, 150, 150),
+                obrazek.subsurface(0, 450, 150, 150),
+                obrazek.subsurface(150, 450, 150, 150),
+                obrazek.subsurface(300, 450, 150, 150)]
+
+                pygame.draw.rect(pictures[1], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[2], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[3], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[4], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[5], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[6], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[7], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[8], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[9], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[10], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[11], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[12], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[13], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[14], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[15], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+
+                tucan = [[pictures[1], pictures[5], pictures[9], pictures[13]],
+                            [pictures[2], pictures[6], pictures[10], pictures[14]],
+                            [pictures[3], pictures[7], pictures[11], pictures[15]],
+                            [pictures[4], pictures[8], pictures[12], pictures[0]]]
+
+                poprawny_uklad = [[pictures[1], pictures[5], pictures[9], pictures[13]],
+                            [pictures[2], pictures[6], pictures[10], pictures[14]],
+                            [pictures[3], pictures[7], pictures[11], pictures[15]],
+                            [pictures[4], pictures[8], pictures[12], pictures[0]]]
+                main_game(tucan, 4, pictures, poprawny_uklad, size, 30)
+
+        if button_3x3.collidepoint((mx,my)):
+            if click:
+                size = 460
+                pictures = [
+                pygame.transform.scale(pygame.image.load(os.path.join("Assets", "outerbox.png")), (SIZE)),
+                obrazek.subsurface(0, 0, 150, 150),
+                obrazek.subsurface(150, 0, 150, 150),
+                obrazek.subsurface(300, 0, 150, 150),
+                obrazek.subsurface(0, 150, 150, 150),
+                obrazek.subsurface(150, 150, 150, 150),
+                obrazek.subsurface(300, 150, 150, 150),
+                obrazek.subsurface(0, 300, 150, 150),
+                obrazek.subsurface(150, 300, 150, 150)]
+
+                pygame.draw.rect(pictures[1], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[2], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[3], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[4], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[5], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[6], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[7], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+                pygame.draw.rect(pictures[8], BLACK, pygame.Rect(0, 0, 150, 150), 3)
+
+                tucan = [[pictures[1], pictures[4], pictures[7]],
+                            [pictures[2], pictures[5], pictures[8]],
+                            [pictures[3], pictures[6], pictures[0]]]
+
+                poprawny_uklad = [[pictures[1], pictures[4], pictures[7]],
+                            [pictures[2], pictures[5], pictures[8]],
+                            [pictures[3], pictures[6], pictures[0]]]
+                main_game(tucan, 3, pictures, poprawny_uklad, size)
+        click = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == MOUSEBUTTONDOWN:
+                click = True
+
+        pygame.display.update()
+
+if _name_ == "_main_":
+    main_menu()
