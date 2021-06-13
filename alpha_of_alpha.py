@@ -137,7 +137,6 @@ def fake_key_movement(grid, empty_space): #fałszywy ruch, polega na tym samym c
 def mouse_movement(x, y, grid, empty_space, pict_spread, pict_size, offset_x=0, offset_y=0):
     global COUNTER
     COUNTER = COUNTER + 1
-    print(COUNTER)
     no_reps = False
     for i in range(len(grid)):
         for j in range(len(grid[i])):
